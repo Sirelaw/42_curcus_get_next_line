@@ -7,7 +7,7 @@ int main()
 	FILE	*fptr;
 	int		i = 0;
 	int		fd;
-	char	*s;
+	char	*s = "";
 
 	fptr = fopen("testfile.txt", "r");
 	if(fptr == NULL)
@@ -17,12 +17,12 @@ int main()
 	}
 	fd = fileno(fptr);
 
-	while(i < 6)
+	while(s)
 	{
-		//s = get_next_line(fd);
-		printf("%s", get_next_line(fd));
+		s = get_next_line(fd);
+		printf("%s", s);
 		i++;
 	}
-	//system("leaks a.out");
+	system("leaks a.out");
 	return (0);
 }

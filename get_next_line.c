@@ -6,7 +6,7 @@
 /*   By: oipadeol <oipadeol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 13:30:38 by oipadeol          #+#    #+#             */
-/*   Updated: 2021/09/26 18:04:11 by oipadeol         ###   ########.fr       */
+/*   Updated: 2021/09/26 19:56:04 by oipadeol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,11 @@ char	*get_next_line(int fd)
 		free(temp_buf);
 		temp_buf = NULL;
 	}
-	while ((flag == 0) && (read(fd, read_buf, BUFFER_SIZE)))
+	
+	while (flag == 0)
 	{
+		if(!(read(fd, read_buf, BUFFER_SIZE)))
+			return (NULL);
 		temp = ft_memchr(read_buf, '\n', BUFFER_SIZE);
 		if (temp)
 		{
