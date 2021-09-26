@@ -10,11 +10,12 @@ int main()
 {
    int i;
    i = 0;
+   char *s = "This is a string";
    while (i < 5)
      {
        using_static();
        i++;
      }
-   printf("%s", using_static());
+   printf("%s\n", s);
    return (0);
 }

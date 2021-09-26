@@ -16,10 +16,12 @@ int main()
 	}
 	fd = fileno(fptr);
 
-	while(i < 3)
+	while(i < 5)
 	{
 		printf("%s", get_next_line(fd));
 		i++;
 	}
 	return (0);
 }
+
+//printf("%s\n", "In here.");
