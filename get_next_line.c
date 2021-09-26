@@ -6,7 +6,7 @@
 /*   By: oipadeol <oipadeol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 13:30:38 by oipadeol          #+#    #+#             */
-/*   Updated: 2021/09/26 13:59:42 by oipadeol         ###   ########.fr       */
+/*   Updated: 2021/09/26 18:04:11 by oipadeol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ char	*get_next_line(int fd)
 	char		*temp;			// Used to hold address of line_buf before freeing.
 	static char	*temp_buf;		// Holds content of read_buff after /n is found. malloc
 	char		*temp_add;		// Used to addresses of line_buf before freeing.
-	char		*line_buf;		// Holds content of all calls to read until a \n is found.
+	char		*line_buf;		// Holds content of all calls to read until a \n is found. malloc
 	int			flag;			// Used to signify a /n has been found.
-	int read_flag = 1;
 
 	if (BUFFER_SIZE == 0)
 		return (NULL);
@@ -36,16 +35,23 @@ char	*get_next_line(int fd)
 	if (temp_buf != NULL)
 	{
 		temp = ft_memchr(temp_buf, '\n', ft_strlen(temp_buf));
-		if (*temp)
+		if (temp)
 		{
+			temp_add = line_buf;
 			line_buf = fp_strjoin(line_buf, temp_buf, (temp - temp_buf + 1));
-			if (!line_buf)
+			if (line_buf == NULL)
 				return (NULL);
-			free(temp_buf);
+			free(temp_add);
+			temp_add = temp_buf;
 			temp_buf = ft_strdup(temp + 1);
+			free(temp_add);
 			return (line_buf);
 		}
+		temp_add = line_buf;
 		line_buf = fp_strjoin(line_buf, temp_buf, ft_strlen(temp_buf));
+		if (line_buf == NULL)
+			return (NULL);
+		free(temp_add);
 		free(temp_buf);
 		temp_buf = NULL;
 	}
@@ -55,22 +61,23 @@ char	*get_next_line(int fd)
 		if (temp)
 		{
 			flag = 1;
-			temp_buf = (char *)malloc(&(read_buf[BUFFER_SIZE]) - temp + 1);
+			temp_buf = (char *)malloc(BUFFER_SIZE - (temp - read_buf));
 			if (temp_buf == NULL)
 				return (NULL);
-			ft_strlcpy(temp_buf, temp + 1, (&(read_buf[BUFFER_SIZE]) - temp + 1));
+			ft_strlcpy(temp_buf, temp + 1, (BUFFER_SIZE - (temp - read_buf)));
 			temp_add = line_buf;
 			line_buf = fp_strjoin(line_buf, read_buf, temp - read_buf + 1);
 			if (line_buf == NULL)
 				return (NULL);
-			free(temp_add);
 		}
+		temp_add = line_buf;
 		if (flag == 0)
 			line_buf = fp_strjoin(line_buf, read_buf, BUFFER_SIZE);
 		if (line_buf == NULL)
 			return (NULL);
-		
+		if (temp_add != line_buf)
+			free(temp_add);
 	}
+	free(read_buf);
 	return (line_buf);
 }
-
