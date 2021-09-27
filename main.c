@@ -23,6 +23,6 @@ int main()
 		printf("%s", s);
 		i++;
 	}
-	system("leaks a.out");
+	//system("leaks a.out");
 	return (0);
 }

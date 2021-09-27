@@ -6,7 +6,7 @@
 /*   By: oipadeol <oipadeol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 09:29:23 by oipadeol          #+#    #+#             */
-/*   Updated: 2021/09/26 20:08:57 by oipadeol         ###   ########.fr       */
+/*   Updated: 2021/09/27 12:21:12 by oipadeol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1
+#define BUFFER_SIZE 3
 #endif
 
 // Returns a line read from a file descriptor. Calling this function in a loop
