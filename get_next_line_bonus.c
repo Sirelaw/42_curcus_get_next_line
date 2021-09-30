@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oipadeol <oipadeol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/28 20:12:39 by oipadeol          #+#    #+#             */
-/*   Updated: 2021/09/30 14:06:45 by oipadeol         ###   ########.fr       */
+/*   Created: 2021/09/30 10:09:24 by oipadeol          #+#    #+#             */
+/*   Updated: 2021/09/30 14:20:22 by oipadeol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*create_buffers(char **read_buf, char **keep, char **temp, int fd)
 {
@@ -106,7 +106,7 @@ void	*read_newline(char **read_buf, char **store, char **keep, char **flag)
 }
 
 /*	read_buf;	 Buffer allocated for reading.
-	store;	 Holds content of read_buff after /n is found. Static variable;
+	store[];	 Holds content of read_buff after /n is found. Static variable;
 	temp;		 Used to addresses before freeing. Also used as flag.
 	keep;		 Holds content of all calls to read until a \n is found.
 	read_bytes:	 the number of bytes in a read call.*/
@@ -114,16 +114,16 @@ void	*read_newline(char **read_buf, char **store, char **keep, char **flag)
 char	*get_next_line(int fd)
 {
 	char		*read_buf;
-	static char	*store;
+	static char	*store[OPEN_MAX];
 	char		*temp;
 	char		*keep;
 	int			read_bytes;
 
 	if (!(create_buffers(&read_buf, &keep, &temp, fd)))
 		return (NULL);
-	if (store != NULL)
+	if (store[fd] != NULL)
 	{
-		temp = check_temp(&store, &keep, &read_buf);
+		temp = check_temp(&store[fd], &keep, &read_buf);
 		if ((temp == NULL) || (ft_strlen(temp) > 0))
 			return (temp);
 		temp = NULL;
@@ -134,7 +134,7 @@ char	*get_next_line(int fd)
 		if (read_bytes <= 0)
 			return (free_and_return(&read_buf, &keep, read_bytes, 1));
 		read_buf[read_bytes] = '\0';
-		if (!(read_newline(&read_buf, &store, &keep, &temp)))
+		if (!(read_newline(&read_buf, &store[fd], &keep, &temp)))
 			return (NULL);
 	}
 	return (free_and_return(&read_buf, &keep, read_bytes, 2));
